@@ -7,9 +7,9 @@ public class User
 {
     public Guid Id { get; private set; }
     public Email? Email { get; private set; }
-    public required string Name { get; private set; } =
-    public required Role Role { get; private set; } =
-    public required Password Password { get; private set; } =
+    public string Name { get; private set; }
+    public Role Role { get; private set; }
+    public Password Password { get; private set; }
     public bool IsActive { get; private set; }
 
     // EF constructor

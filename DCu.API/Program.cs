@@ -14,6 +14,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
+builder.Services.AddHttpClient<IGeocodingService, NominatimGeocodingService>(client =>
+{
+    client.DefaultRequestHeaders.Add("User-Agent", "D-Cu API - Contacto: cubillita@gmail.com");
+});
 
 var app = builder.Build();
 

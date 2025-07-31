@@ -1,4 +1,5 @@
 ﻿using DCu.Domain.Entities;
+using DCu.Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -17,5 +18,6 @@ public class AppDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new ClientConfiguration());
     }
 }

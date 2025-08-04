@@ -1,7 +1,9 @@
-﻿namespace DCu.Domain.Interfaces.Security;
+﻿using DCu.Domain.ValueObjects;
+
+namespace DCu.Domain.Interfaces.Security;
 
 public interface IPasswordHasher
 {
-    string Hash(string plainPassword);
-    bool Verify(string plainPassword, string hash);
+    PasswordHash Hash(Password plainPassword);
+    bool Verify(Password password, PasswordHash passwordHash);
 }

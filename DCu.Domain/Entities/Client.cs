@@ -1,4 +1,6 @@
 ﻿using DCu.Domain.ValueObjects;
+using System.ComponentModel.Design;
+using System.Numerics;
 
 namespace DCu.Domain.Entities;
 
@@ -14,14 +16,16 @@ public class Client
     public string Phone { get; private set; }
     public Email? Email { get; private set; }
     public bool IsActive { get; private set; }
+    public Guid CompanyId { get; private set; }
+    public Company Company { get; private set; } = default!;
+
 
     // Constructor para EF
     private Client() { }
 
-    private Client(Guid id, string nameOrCompany, string? documentNumber, ClientType type, string phone, Email? email, bool isActive)
+    private Client(Guid id, string nameOrCompany, string? documentNumber, ClientType type, 
+        string phone, Email? email, bool isActive, Guid companyId)
     {
-        ValidateNameOrCompany(nameOrCompany);
-        ValidatePhone(phone);
 
         Id = id;
         NameOrCompany = nameOrCompany;
@@ -30,38 +34,60 @@ public class Client
         Phone = phone;
         Email = email;
         IsActive = isActive;
+        CompanyId = companyId;
     }
 
     /// <summary>
     /// Crea un nuevo cliente.
     /// </summary>
-    public static Client Create(string nameOrCompany, string? documentNumber, ClientType type, string phone, string? email)
-        => new(
+    public static Client Create(string nameOrCompany, string? documentNumber,
+        ClientType type, string phone, string? email, Guid companyId)
+    {
+        Validate(nameOrCompany, phone, companyId);
+
+        return new(
             Guid.NewGuid(),
             nameOrCompany,
             documentNumber,
             type,
             phone,
             string.IsNullOrWhiteSpace(email) ? null : Email.Create(email),
-            true
+            true,
+            companyId
         );
+    }
 
     /// <summary>
     /// Reconstruye un cliente desde persistencia.
     /// </summary>
-    public static Client Rehydrate(Guid id, string nameOrCompany, string? documentNumber, ClientType type, string phone, string? email, bool isActive)
-        => new(
+    public static Client Rehydrate(Guid id, string nameOrCompany, string? documentNumber, 
+        ClientType type, string phone, string? email, bool isActive, Guid companyId)
+    {
+        Validate(nameOrCompany, phone, companyId);
+
+        return new(
             id,
             nameOrCompany,
             documentNumber,
             type,
             phone,
             string.IsNullOrWhiteSpace(email) ? null : Email.Create(email),
-            isActive
+            isActive,
+            companyId
         );
+    }
 
     public void Deactivate() => IsActive = false;
     public void Activate() => IsActive = true;
+
+    public static void Validate(string nameOrCompany, string phone, Guid companyId)
+    {
+        ValidateNameOrCompany(nameOrCompany);
+        ValidatePhone(phone);
+        if (companyId == Guid.Empty)
+            throw new ArgumentException("El cliente debe pertenecer a una empresa.", nameof(companyId));
+    }
+
 
     private static void ValidateNameOrCompany(string value)
     {

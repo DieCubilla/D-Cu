@@ -10,11 +10,12 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
         builder.HasKey(r => r.Id);
 
+        builder.Property(r => r.Id)
+            .IsRequired();
+
         builder.Property(r => r.Name)
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.HasMany(r => r.Users)
-            .WithOne(u => u.Role);
     }
 }

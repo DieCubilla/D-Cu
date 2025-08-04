@@ -5,6 +5,7 @@
 /// </summary>
 public class Address
 {
+    public Guid Id { get; private set; } 
     public string Reference { get; private set; }
     public string Street { get; private set; }
     public string? StreetNumber { get; private set; }
@@ -16,13 +17,8 @@ public class Address
 
     private Address(string reference, string street, string? streetNumber, Guid cityId)
     {
-        if (string.IsNullOrWhiteSpace(reference))
-            throw new ArgumentException("La referencia es obligatoria.", nameof(reference));
-        if (string.IsNullOrWhiteSpace(street))
-            throw new ArgumentException("La calle es obligatoria.", nameof(street));
-        if (cityId == Guid.Empty)
-            throw new ArgumentException("El identificador de ciudad es obligatorio.", nameof(cityId));
 
+        Id = Guid.NewGuid();
         Reference = reference;
         Street = street;
         StreetNumber = streetNumber;
@@ -33,5 +29,16 @@ public class Address
     /// Crea una nueva dirección validando sus invariantes.
     /// </summary>
     public static Address Create(string reference, string street, string? streetNumber, Guid cityId)
-        => new Address(reference, street, streetNumber, cityId);
+    {
+        if (string.IsNullOrWhiteSpace(street))
+            throw new ArgumentException("La calle es obligatoria.", nameof(street));
+        if (cityId == Guid.Empty)
+            throw new ArgumentException("El identificador de ciudad es obligatorio.", nameof(cityId));
+        if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentException("Referencia es obligatoria.", nameof(reference));
+
+        return new Address(reference, street, streetNumber, cityId);
+    }
+
+    public override string ToString()
+        => $"{Street} {StreetNumber ?? ""}, {Reference}";
 }

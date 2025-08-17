@@ -7,9 +7,9 @@ public class User
 {
     // Propiedades
     public Guid Id { get; private set; }
-    public string Name { get; private set; } = default!;
-    public Email Email { get; private set; } = default!;
-    public PasswordHash PasswordHash { get; private set; } = default!; // Renombrada
+    public string Name { get; private set; }
+    public Email Email { get; private set; }
+    public PasswordHash PasswordHash { get; private set; }
     public bool IsActive { get; private set; }
 
     // Relaciones con otras entidades
@@ -19,7 +19,11 @@ public class User
     public Company Company { get; private set; } = default!;
 
     // Constructor privado para EF Core
-    private User() { }
+    private User() { 
+        Name = default!;
+        Email = default!;
+        PasswordHash = default!;
+    }
 
     // Método de fábrica para crear una NUEVA instancia de usuario
     public static User Create(string name, string email, string plainPassword, Guid roleId, Guid companyId, IPasswordHasher hasher)
@@ -33,12 +37,12 @@ public class User
 
         // Creación de Value Objects: la validación se realiza en sus constructores
         var emailVo = Email.Create(email);
-        var passwordVo = new Password(plainPassword);
+        var passwordVo = new Password(plainPassword.Trim());
 
         return new User
         {
             Id = Guid.NewGuid(),
-            Name = name,
+            Name = name.Trim(),
             Email = emailVo,
             PasswordHash = hasher.Hash(passwordVo),
             RoleId = roleId,
@@ -48,25 +52,6 @@ public class User
     }
 
     // Método de fábrica para rehidratar una instancia EXISTENTE desde la DB
-    public static User Rehydrate(Guid id, string name, string email, string hashedPassword, Guid roleId, Guid companyId, bool isActive)
-    {
-        if (id == Guid.Empty) throw new ArgumentException("Id no válido.", nameof(id));
-        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("El nombre es obligatorio.", nameof(name));
-        if (string.IsNullOrWhiteSpace(hashedPassword)) throw new ArgumentException("La contraseña hasheada es obligatoria.", nameof(hashedPassword));
-        if (roleId == Guid.Empty) throw new ArgumentException("El identificador de rol es obligatorio.", nameof(roleId));
-        if (companyId == Guid.Empty) throw new ArgumentException("El usuario no pertenece a ninguna empresa.", nameof(companyId));
-
-        return new User
-        {
-            Id = id,
-            Name = name,
-            Email = Email.Create(email),
-            PasswordHash = PasswordHash.FromHash(hashedPassword),
-            RoleId = roleId,
-            CompanyId = companyId,
-            IsActive = isActive
-        };
-    }
 
     // Comportamiento
     public void ChangePassword(string newPlainPassword, IPasswordHasher hasher)

@@ -5,10 +5,12 @@ public class City
     public Guid Id { get; private set; }
     public string Name { get; private set; }
     public Guid DepartmentId { get; private set; }
-    public Department Department { get; private set; }
+    public Department Department { get; private set; } = default!;
 
     // Constructor para EF
-    private City() { }
+    private City() { 
+        Name = default!;
+    }
 
     private City(string name, Guid departmentId)
     {
@@ -24,7 +26,7 @@ public class City
         if (departmentId == Guid.Empty)
             throw new ArgumentException("El identificador de departamento es obligatorio.", nameof(departmentId));
 
-        return new City(name, departmentId);
+        return new City(name.Trim(), departmentId);
     }
 
 

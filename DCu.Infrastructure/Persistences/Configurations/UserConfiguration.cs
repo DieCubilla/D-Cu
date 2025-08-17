@@ -31,10 +31,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .IsRequired(false); // Email es opcional
         });
 
-        // Password (requerido)
-        builder.OwnsOne(u => u.Password, pw =>
+        // PasswordHash (requerido)
+        builder.OwnsOne(u => u.PasswordHash, pw =>
         {
-            pw.Property(p => p.HashedValue)
+            pw.Property(p => p.Value)
               .HasColumnName("PasswordHash")
               .IsRequired();
         });

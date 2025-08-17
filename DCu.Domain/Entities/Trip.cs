@@ -45,7 +45,7 @@ public class Trip
         if (clientId == Guid.Empty) throw new ArgumentException("Cliente requerido.", nameof(clientId));
         if (userId == Guid.Empty) throw new ArgumentException("UserId is required.", nameof(userId));
         if (vehicleId == Guid.Empty) throw new ArgumentException("El vehículo es obligatorio.", nameof(vehicleId));
-        if (departureTime == default) throw new ArgumentException("El lugar de inicio es obligatorio.", nameof(departureTime));
+        if (departureTime == default) throw new ArgumentException("La fecha de salida es obligatoria.", nameof(departureTime));
         if (price < 0) throw new ArgumentOutOfRangeException(nameof(price), "El precio no puede ser menor a 0.");
         if (companyId == Guid.Empty) throw new ArgumentException("La empresa es obligatoria.", nameof(companyId));
 

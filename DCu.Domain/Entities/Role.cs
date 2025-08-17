@@ -6,7 +6,9 @@ public class Role
     public string Name { get; private set; }
 
     // Constructor para EF
-    private Role() { }
+    private Role() { 
+        Name = default!;
+    }
 
     private Role(string name)
     {
@@ -19,10 +21,8 @@ public class Role
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("El nombre del rol es obligatorio.", nameof(name));
 
-        return new Role(name);
+        return new Role(name.Trim());
     }
 
     public override string ToString() => Name;
 }
-
-

@@ -18,7 +18,7 @@ public sealed class Password
             throw new ArgumentException("La contraseña no cumple con los requisitos de seguridad.", nameof(value));
         }
 
-        Value = value;
+        Value = value.Trim();
     }
 
     private static bool IsStrong(string password)

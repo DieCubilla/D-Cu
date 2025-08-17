@@ -1,6 +1,7 @@
 ﻿namespace DCu.Domain.Entities;
 
 using DCu.Domain.Enums;
+using DCu.Domain.ValueObjects;
 
 public class Payment
 {
@@ -15,7 +16,7 @@ public class Payment
     public decimal Amount { get; private set; }
     public DateTime Date { get; private set; }
 
-    public PaymentMethod Method { get; private set; }
+    public PaymentMethod Method { get; private set; } = default!;
 
     private Payment() { }
 
@@ -33,13 +34,15 @@ public class Payment
     public static Payment Create(Guid tripId, Guid collectedByUserId, decimal amount, DateTime date, PaymentMethod method)
     {
         if (tripId == Guid.Empty)
-            throw new ArgumentException("TripId is required.", nameof(tripId));
+            throw new ArgumentException("El viaje es requerido.", nameof(tripId));
         if (collectedByUserId == Guid.Empty)
-            throw new ArgumentException("CollectedByUserId is required.", nameof(collectedByUserId));
+            throw new ArgumentException("El usuario es requerido.", nameof(collectedByUserId));
         if (amount <= 0)
-            throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than 0.");
+            throw new ArgumentOutOfRangeException(nameof(amount), "El monto debe ser mayor a 0.");
         if (date == default)
-            throw new ArgumentException("Date is required.", nameof(date));
+            throw new ArgumentException("La fecha es requerida.", nameof(date));
+        if (method == default)
+            throw new ArgumentException("El metodo es requerido.", nameof(method));
 
         return new Payment(tripId, collectedByUserId, amount, date, method);
     }

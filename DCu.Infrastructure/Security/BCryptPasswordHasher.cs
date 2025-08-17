@@ -12,7 +12,7 @@ public class BCryptPasswordHasher : IPasswordHasher
     public PasswordHash Hash(Password password)
     {
         // Se accede al valor de la contraseña a través de la propiedad Value del VO
-        var hash = BCrypt.Net.BCrypt.HashPassword(password.Value, workFactor: WorkFactor);
+        var hash = BCrypt.Net.BCrypt.HashPassword(password.Value.Trim(), workFactor: WorkFactor);
 
         // Se devuelve un nuevo PasswordHash, usando el método de fábrica
         return PasswordHash.FromHash(hash);

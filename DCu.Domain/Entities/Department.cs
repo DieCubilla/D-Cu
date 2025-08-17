@@ -8,7 +8,9 @@ public class Department
     public IReadOnlyCollection<City> Cities => _cities.AsReadOnly();
 
     // Constructor para EF
-    private Department() { }
+    private Department() {
+        Name = default!;
+    }
 
     private Department(string name)
     {
@@ -21,7 +23,7 @@ public class Department
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("El nombre es obligatorio.", nameof(name));
 
-        return new Department(name); 
+        return new Department(name.Trim()); 
     }
 
     public void AddCity(City city)

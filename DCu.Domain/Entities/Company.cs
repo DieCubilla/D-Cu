@@ -3,18 +3,18 @@
 public class Company
 {
     public Guid Id { get; private set; }
-    public string Name { get; private set; } = default!;
+    public string Name { get; private set; } 
     public bool IsActive { get; private set; }
 
-    // Navegación (opcional)
     private readonly List<User> _users = new();
     public IReadOnlyCollection<User> Users => _users.AsReadOnly();
 
-    private Company() { }
+    private Company() { 
+        Name = default!;
+    }
 
     private Company(string name)
     {
-
         Id = Guid.NewGuid();
         Name = name;
         IsActive = true;
@@ -25,7 +25,7 @@ public class Company
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Company name is required.", nameof(name));
 
-        return new Company(name);
+        return new Company(name.Trim());
     }
 
     public void AddUser(User user)

@@ -28,12 +28,12 @@ public class DestinationConfiguration : IEntityTypeConfiguration<Destination>
 
         builder.Property(d => d.DepartureAt);
 
-        builder.HasOne(d => d.Address)
+        builder.HasOne(d => d.AddressId)
                .WithMany()
                .HasForeignKey(d => d.AddressId)
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(d => d.Trip)
+        builder.HasOne(d => d.TripId)
                .WithMany(t => t.Destinations)
                .HasForeignKey(d => d.TripId)
                .OnDelete(DeleteBehavior.Cascade);

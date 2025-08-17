@@ -12,7 +12,7 @@ public sealed class PasswordHash
             throw new ArgumentException("El hash de la contraseña no puede estar vacío.", nameof(value));
         }
 
-        Value = value;
+        Value = value.Trim();
     }
 
     // Método de fábrica para crear un PasswordHash desde un hash ya existente (ej. desde la base de datos).
